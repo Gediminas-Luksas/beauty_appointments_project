@@ -1,0 +1,51 @@
+.modal{
+    /* display: none; */
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    color: #ecebeb;
+}
+
+.modal-content{
+    background: #5f5f79;
+    margin: 10% auto;
+    padding: 30px;
+    width: 80%;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2),
+    0 7px 20px 0 rgba(0, 0, 0, 0.27);
+    animation-name: openModal;
+    animation-duration: 1s;
+}
+.modal-content h4 {
+    font-size: 22px;
+    font-weight: 500;
+    color: #ecebeb;
+}
+
+.closeBtn{
+    color: #e84393;
+    float: right;
+    font-size: 34px;
+    margin: -7px;
+}
+.closeBtn:hover, .closeBtn:focus{
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+.select {
+    padding: 4px;
+}
+
+.select select{
+    border: none;
+    border-bottom: 1px solid #ffffff9f;
+    background: transparent;
+    color: #e84393;
+    outline: none;
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+}
