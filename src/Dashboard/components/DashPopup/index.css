@@ -1,0 +1,89 @@
+.popup {
+  display: flex;
+  align-items: center;
+}
+.shows{
+  display: flex;
+}
+.popup .show {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 14px;
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+  }
+  .dach-popup{
+    display: flex;
+    align-items: center;
+  }
+  .time{
+    color: #000;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
+  @-webkit-keyframes fadeIn {
+    from {opacity: 0;} 
+    to {opacity: 1;}
+  }
+  
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+  }
+  .btn-dash-del-edit{
+    border-radius: 15px;
+    background: #e84393;
+    color: #ffffff;
+    height: 20px;
+    width: 60px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 1px;
+    border: none;
+    outline: none;
+    transition: all .5s;
+  }
+  .btn-dash-delete{
+    flex: 1;
+    border-radius: 15px;
+    background: #e84393;
+    color: #ffffff;
+    max-width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    transition: all .5s;
+}
+  .btn-dash-add{
+    border-radius: 15px;
+    background: #0e9701;
+    color: #ffffff;
+    width: 80px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    transition: all .5s;
+}
+
+.btn-dash-add:hover, .btn-dash-delete:hover, .btn-dash-del-edit:hover{
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: .5rem .5rem .2rem rgba(0, 0, 0, 0.2);
+}
+
+.btn-dash-add:active, .btn-dash-delete:active, .btn-dash-del-edit:active{
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+
+

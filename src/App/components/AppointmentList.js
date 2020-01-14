@@ -1,24 +1,18 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { fetchAppointmentsDate } from '../actions';
 import SelectModal from '../components/Modal';
 
 class AppointmentLists extends React.Component{
-    constructor(){
-        super();
-        this.state = {
-            isSelectModalOpen: false,
-            selected: '',
-            author: '',
-            appointments: [{
-                id : "5e158e55735f181b0a17cb02",
-                times : [
-                    {time : "08:15 AM", author : "Gediminas",selected : "Volume"},
-                    {time : "12:15 AM", author : "Gediminas",selected : ""},
-                    {time : "15:00 AM", author : "",selected : "Volume"}
-            ],
-                date : "2020-01-08",
-                dateForAppointment : "2020 January 10"
-            }]
-        };
+    state = {
+        _id: '',
+        isSelectModalOpen: false,
+        selected: '',
+        author: ''
+    };
+    constructor(props){
+        super(props);
+        this.completeTask = this.completeTask.bind(this )
     }
 
     onModalOpen = () => {
@@ -33,31 +27,39 @@ class AppointmentLists extends React.Component{
         })
     }
 
+    completeTask(_id) {
+
+        console.log(_id)
+    }
+    
+    componentDidMount(_id){
+        this.props.fetchAppointmentsDate(_id);
+    }
+    
     render(){
         const allData = this.props.year +" "+ this.props.month +" "+ this.props.allDay;
-        const appointments  = this.state.appointments;
+        const { appointments } = this.props.appointments;
         return(
             <div className="calendar_date">
                 <h2>Date and Time</h2>
                 <h3>{allData}</h3>
                 { !this.state.isSelectModalOpen ? 
-                appointments.map(( date, id ) => {
-                    return (
-                        <span key={id}>
-                            { date.times.map((time, i) => {
-                                return (
-                                    <p key={i}>
-                                        <button onClick={this.onModalOpen} className="btn_time">
-                                            {time.time}
-                                        </button>
-                                    </p>
-                                )
-                            }) }
-                            <button key={id} onClick={this.onModalOpen} className="btn_time">
-                                <p key={id}>{date.times.time}</p>
-                            </button>
-                        </span>
-                    );
+                appointments.map(({ _id, dateForAppointment }) => {
+                    if(dateForAppointment === allData){
+                        return (
+                            <span key={_id}>
+                                    
+                                <p>
+                                <button onClick={this.onModalOpen} className="btn_time">
+                                    {dateForAppointment}
+                                </button>
+                                </p>
+
+                            </span>
+                        );
+                    }
+                        return null;
+
                 }) 
                 :
                     <SelectModal 
@@ -70,4 +72,10 @@ class AppointmentLists extends React.Component{
     }
 }
 
-export default AppointmentLists;
+const mapStateToProps = state => {
+    return { appointments: state.appointments }
+};
+
+export default connect(mapStateToProps, 
+    { fetchAppointmentsDate }
+    )(AppointmentLists);

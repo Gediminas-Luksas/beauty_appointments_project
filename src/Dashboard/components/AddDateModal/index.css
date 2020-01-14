@@ -1,0 +1,73 @@
+.add-modal{
+    position: relative;
+    height: 60vh;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    margin: 4px 0 14px 0;
+}
+
+.add{
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   width: 300px;
+   height: 350px;
+   padding: 80px 40px;
+   box-sizing: border-box;
+   background: rgba(0, 0, 0, 0.7);
+   transform: translate(-50%, -50%);
+   animation-name: openModal;
+   animation-duration: 1s;
+}
+
+.add p {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    color: #ffffff;
+}
+.add input{
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.add input[type="text"],
+.add input[type="time"]
+{
+    border: none;
+    border-bottom: 1px solid #ffffff9f;
+    background: transparent;
+    color: #ffffff;
+    outline: none;
+    height: 40px;
+    font-size: 16px;
+}
+
+.btn-add{
+    border-radius: 15px;
+    background: #e84393;
+    color: #ffffff;
+    width: 100%;
+    height: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    outline: none;
+}
+.btn-add:hover{   
+    color: #000;
+}
+
+.closeBtnLogin{
+    color: #1d1d2b;
+    float: right;
+    font-size: 34px;
+    margin: 16px 22px;
+}
+.closeBtnLogin:hover, .closeBtnLogin:focus{
+    color: #e84393;
+    text-decoration: none;
+    cursor: pointer;
+}
+

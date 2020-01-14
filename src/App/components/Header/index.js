@@ -20,6 +20,7 @@ const Header = () => {
                 <li><a href="/">About Me</a></li>
                 <li><a href="/">Book Now</a></li>
                 <li><a href="/">Login</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
             </ul>
         </div>
         <div className="header_card">

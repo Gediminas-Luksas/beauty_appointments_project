@@ -1,16 +1,17 @@
 import React from 'react';
 import moment from 'moment';
-import './index.css';
 
-import AppointmentLists from '../../components/AppointmentList';
+import DashPopup from './DashPopup';
 
-export default class Calendar extends React.Component {
+
+export default class DashboardCalendar extends React.Component {
     state = {
         dateContext: moment(),
         today: moment(),
         selectedDay: null,
+        popup: false
     }
-
+    
     weekdaysShort = moment.weekdaysShort();
     months = moment.months();
 
@@ -53,7 +54,7 @@ export default class Calendar extends React.Component {
         });
         this.props.onPrevMonth && this.props.onPrevMonth();
     }
-    
+
     onDayClick = (e, day) => {
         this.setState({
             selectedDay: day
@@ -61,14 +62,28 @@ export default class Calendar extends React.Component {
         this.props.onDayClick && this.props.onDayClick(e, day);
     }
 
-    renderDate(){
+
+    renderData(){
+        const allData = this.year() +" "+ this.month() +" "+ this.currentDay();
+        const allDataSelected = this.year() +" "+ this.month() +" "+ this.state.selectedDay;
+
         if(this.state.selectedDay === null){
-            return this.currentDate()
-        } return this.state.selectedDay
-    };
-    
+            return (
+            <div>
+                {allData}
+            </div>
+            );
+        }
+        return (
+            <div>
+                {allDataSelected}
+            </div>
+        );
+    }
+
+
     render() {
-        let weekdays = this.weekdaysShort.map((day) => {
+        let weekdays = this.weekdaysShort.map(day => {
             if(day === "Sun" || day === "Sat"){
                 return <li className="weekend" key={day}>{day}</li>;
             }
@@ -88,11 +103,11 @@ export default class Calendar extends React.Component {
         let daysInMonth = [];
         for (let d = 1; d <= this.daysInMonth(); d++) {
             const dayToString = d.toString();
-            let className = (dayToString === this.currentDay() ? "days active": "days");
+            let className = (dayToString === this.currentDay() ? "days": "");
             let selectedClass = (  d === this.state.selectedDay ? " active " : "")
             daysInMonth.push(
-                <li key={d} className={className + selectedClass} >
-                    <span onClick={(e)=>{this.onDayClick(e, d)}}>{d}</span>
+                <li onClick={(e)=>{this.onDayClick(e, d)}} key={d} className={className + selectedClass} >
+                    <span>{d}</span>
                 </li>
             );
         }
@@ -124,28 +139,31 @@ export default class Calendar extends React.Component {
             );
         })
         return (
-            <section className="calendar">
+            <section className="main-content">
                 <div className="calendar_month">
                     <div className="month">      
                         <ul>
                             <li onClick={(e)=> {this.prevMonth()}} className="prev">&#10094;</li>
                             <li onClick={(e)=> {this.nextMonth()}} className="next">&#10095;</li>
+                                Today 
                             <li className="months">
-                            {this.month()}
+                            <span>{this.month()} {this.currentDate()}</span>
                             <br />
                             <span>{this.year()}</span>
                             </li>
                         </ul>
                     </div>
-                        <ul className="weekdays">
+                        <ul className="dash-weekday">
                             {weekdays}
                         </ul>
-                    <ul className="days">  
+                    <ul onClick={() => this.setState({popup: true})} className="days">  
+                                <DashPopup keys={trElems} popup={this.state.popup} allDay={this.renderData()} />
                                 {trElems}
                             </ul>
                 </div>
-                <AppointmentLists year={this.year()} month={this.month()} allDay={this.renderDate()} />
+
         </section>
         );
     }
 }
+

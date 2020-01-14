@@ -6,6 +6,8 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Calendar from './pages/Calendar';
 import Footer from './components/Footer';
+import Dashboard from '../Dashboard';
+
 
 const App = () => {
     return (
@@ -16,6 +18,7 @@ const App = () => {
                 <Route path="/" exact component={About} />
                 <Route path="/" exact component={Calendar} />
                 <Route path="/" exact component={Footer} />
+                <Route path="/dashboard" component={Dashboard} />
             </BrowserRouter>
         </div>
     );
