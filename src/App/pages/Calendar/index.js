@@ -91,8 +91,8 @@ export default class Calendar extends React.Component {
             let className = (dayToString === this.currentDay() ? "days active": "days");
             let selectedClass = (  d === this.state.selectedDay ? " active " : "")
             daysInMonth.push(
-                <li key={d} className={className + selectedClass} >
-                    <span onClick={(e)=>{this.onDayClick(e, d)}}>{d}</span>
+                <li onClick={(e)=>{this.onDayClick(e, d)}} key={d} className={className + selectedClass} >
+                    <span>{d}</span>
                 </li>
             );
         }

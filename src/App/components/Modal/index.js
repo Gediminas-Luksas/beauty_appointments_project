@@ -1,9 +1,14 @@
 import React from 'react';
 import './index.css';
+import { connect } from 'react-redux';
+import { updateTimeById } from '../../actions';
 
 class SelectModal extends React.Component {
     state = {
         isSelectModalOpen: false,
+        id: '',
+        time: '',
+        author: 'Facebook Login',
         selected: ''
     }
     onModalOpen = () => {
@@ -12,14 +17,35 @@ class SelectModal extends React.Component {
 
     onChange = e => {
         this.setState({ [e.target.name]: e.target.value });
+        this.setState({
+            id: this.props._id,
+            time: this.props.time
+        })
     };
 
-    onSubmited = () => {
+    updateSubmit = () => {
+        const editAppointmentTime = {
+            _id: this.state.id,
+            time: this.state.time,
+            author: this.state.author,
+            selected: this.state.selected
+        }
+        this.props.updateTimeById(editAppointmentTime);     
+}
+    
+    onSubmited = e => {
+        e.preventDefault();
         if(this.state.selected === ''){
             return null;
         }
-        this.props.isSelected(this.state.selected)
-        this.onModalOpen()
+        const editTime = {
+            _id: this.state.id,
+            time: this.state.time,
+            author: this.state.author,
+            selected: this.state.selected
+        }
+        this.props.updateTimeById(editTime);
+        this.onModalOpen();
     }
     
     render(){
@@ -35,7 +61,7 @@ class SelectModal extends React.Component {
                             <option value="Volume">Volume</option>
                         </select>
                     </div>
-                    <button onClick={this.onSubmited.bind(this)} className="btn-select" type="submit">
+                    <button onClick={this.onSubmited} className="btn-select" type="submit">
                         Submit
                     </button>
                 </div>
@@ -45,4 +71,11 @@ class SelectModal extends React.Component {
     };
 };
 
-export default SelectModal;
+const mapStateToProps = state => {
+    return { times: state.times }
+}
+
+export default connect(
+    mapStateToProps, 
+    { updateTimeById }
+    )(SelectModal);

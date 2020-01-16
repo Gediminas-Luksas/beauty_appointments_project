@@ -1,81 +1,94 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchAppointmentsDate } from '../actions';
+import { fetchAppointmentsDate, fetchAppointmentsTime } from '../actions';
 import SelectModal from '../components/Modal';
 
 class AppointmentLists extends React.Component{
     state = {
-        _id: '',
         isSelectModalOpen: false,
-        selected: '',
-        author: ''
+        _id: '',
+        time: ''
     };
-    constructor(props){
-        super(props);
-        this.completeTask = this.completeTask.bind(this )
+
+    componentDidMount(){
+        this.props.fetchAppointmentsDate();
+        this.props.fetchAppointmentsTime();
     }
 
-    onModalOpen = () => {
+    onModalOpen = (_id, time) => {
         this.setState({
             isSelectModalOpen: !this.state.isSelectModalOpen,
+            _id: _id,
+            time: time
         });
-    };
-
-    onSelected = value => {
-        this.setState({
-            selected: value
-        })
     }
 
-    completeTask(_id) {
-
-        console.log(_id)
+    renderData(){
+        const allData = this.props.year +" "+ this.props.month +" "+ this.props.allDay;
+        return (
+            <div>
+                <h2>Date and Time</h2>
+                <h3>{allData}</h3>
+            </div>
+        );
     }
-    
-    componentDidMount(_id){
-        this.props.fetchAppointmentsDate(_id);
+
+    renderList(){
+        const allData = this.props.year +" "+ this.props.month +" "+ this.props.allDay;
+        const { dates } = this.props.dates;
+        const { times } = this.props.times;
+        return dates.map(({ _id, dateForAppointment }) => {
+            if(dateForAppointment === allData){
+                return (
+                    <span key={_id}>              
+                            {
+                                times.map(({ _id, time, author, date }) => {
+                                    if(author){
+                                        return null;
+                                    }
+                                    return (
+                                        <p key={_id}>
+                                            <button onClick={this.onModalOpen.bind(this, _id, time)} className="btn_time">
+                                                {time}
+                                            </button>
+                                        </p>
+                                    );
+                                })
+                            }
+                    </span>
+                );
+            } 
+                return null;
+        });
     }
     
     render(){
-        const allData = this.props.year +" "+ this.props.month +" "+ this.props.allDay;
-        const { appointments } = this.props.appointments;
-        return(
+        return( 
             <div className="calendar_date">
-                <h2>Date and Time</h2>
-                <h3>{allData}</h3>
-                { !this.state.isSelectModalOpen ? 
-                appointments.map(({ _id, dateForAppointment }) => {
-                    if(dateForAppointment === allData){
-                        return (
-                            <span key={_id}>
-                                    
-                                <p>
-                                <button onClick={this.onModalOpen} className="btn_time">
-                                    {dateForAppointment}
-                                </button>
-                                </p>
-
-                            </span>
-                        );
-                    }
-                        return null;
-
-                }) 
-                :
+                {this.renderData()}
+                {
+                    !this.state.isSelectModalOpen ? this.renderList() : 
                     <SelectModal 
-                        isOpen={this.onModalOpen.bind(this)} 
-                        isSelected={this.onSelected.bind(this)}
+                        isOpen={this.onModalOpen.bind(this)}
+                        _id={this.state._id}
+                        time={this.state.time}
                     />
                 }
             </div>
+
+
         );
     }
 }
 
 const mapStateToProps = state => {
-    return { appointments: state.appointments }
+    return { 
+        dates: state.dates,
+        times: state.times
+     }
 };
 
 export default connect(mapStateToProps, 
-    { fetchAppointmentsDate }
+    { fetchAppointmentsDate,
+        fetchAppointmentsTime }
     )(AppointmentLists);

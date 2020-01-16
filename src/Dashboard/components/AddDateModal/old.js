@@ -2,67 +2,103 @@ import React from 'react';
 import './index.css';
 
 import { connect } from 'react-redux';
-import { fetchAppointmentsTime, addAppointmentTime, updateTimeById, deleteAppointmentTime } from '../../../App/actions';
+import { addAppointment, addAppointmentTime, updateTimeById } from '../../../App/actions';
 
-class EditingModal extends React.Component {
-    state = {
-        addTimeModalOpen: false,
-        editTimeModal: false,
-        idForEdit: '',
-        time: '',
-        author: '',
-        selected: ''
-    }
-    componentDidMount(){
-        this.props.fetchAppointmentsTime(this.props.dateId);
+class Login extends React.Component {
+    constructor(props){
+        super(props);
+
+        this.state = {
+            isOpen: false,
+            onModalOpen: false,
+            time: '',
+            author: '',
+            selected: ''
+        };
     }
 
-    addTimeModalOpen = () => {
+    onClickOpen = () => {
         this.setState({
-            addTimeModalOpen: !this.state.addTimeModalOpen
-        })
+           isOpen: !this.state.isOpen 
+        });
     }
-
-    editTimeModal = _id => {
+    onModalOpen = () => {
         this.setState({
-            editTimeModal: !this.state.editTimeModal,
-            idForEdit: _id
+           onModalOpen: !this.state.onModalOpen 
         })
     }
 
     onChange = e => {
         this.setState({ [e.target.name]: e.target.value });
     }
+    
+    onSubmit = e => {
+        e.preventDefault();
+        
+        const newAppointment = {
+            dateForAppointment: this.props.allDay.props.children
+        }
+        this.props.addAppointment(newAppointment);
+        this.onModalOpen();
+        this.onClickOpen();
+    }
 
-    onSubmit = e => { 
+    onTimeSubmit = e => { 
         e.preventDefault();
         const newTime = {
-            _id: this.props.dateId,
+            _id: this.props.times.add_appointment_id,
             time: this.state.time
         }
         this.props.addAppointmentTime(newTime);
+        console.log(this.props)
     }
-
+    
     onEditSubmit = e => {
         e.preventDefault();
 
         const editAppointmentTime = {
-            _id: this.state.idForEdit,
+            _id: this.props.idForEdit,
             time: this.state.time,
             author: this.state.author,
             selected: this.state.selected
         }
-        this.props.updateTimeById(editAppointmentTime);
-        this.editTimeModal();
+        this.props.updateTimeById(editAppointmentTime)
     }
     
-
-    renderAddTimeModal(){
-        return(
-            <div className="add-modal"> 
-                <span onClick={this.addTimeModalOpen} className="closeBtnLogin">&times;</span>
-                <div className="add">
+    render(){
+        console.log(this.props.times)
+        if(this.state.isOpen) {
+            return (
+                <div className="add-modal"> 
+                    <span onClick={this.onClickOpen} className="closeBtnLogin">&times;</span>
+                    <div className="add">
                     <form onSubmit={this.onSubmit}>
+                        <div>
+                            <label>Date</label>
+                            <input 
+                                name="dateForAppointment" 
+                                type="text" 
+                                disabled 
+                                value={this.props.allDay.props.children} 
+                            />
+                        </div>
+                        <div>
+                            <button 
+                                className="btn-add" 
+                                type="submit">
+                                    Next
+                            </button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            );
+        } else if(this.state.onModalOpen){
+            return (
+                <div className="add-modal"> 
+                    <span onClick={this.onModalOpen} className="closeBtnLogin">&times;</span>
+                    <div className="add">
+                    <form onSubmit={this.onTimeSubmit}>
                         <div>
                             <label>Enter Time</label>
                             <input
@@ -73,6 +109,8 @@ class EditingModal extends React.Component {
                                 pattern="[0-9]{2}:[0-9]{2}"
                                 value={this.state.time}
                             />
+                        </div>
+                        <div>
                             <button 
                                 className="btn-add" 
                                 type="submit">
@@ -80,17 +118,14 @@ class EditingModal extends React.Component {
                             </button>
                         </div>
                     </form>
+                    </div>
                 </div>
-            </div>
-        );
-    }
-
-    renserEditTimeModal(){
-        const { times } = this.props.times;
-        const time = times.find(date => date._id === this.state.idForEdit);
-            return(
+            );
+        }
+        if(this.props.showEditor){
+            return (
                 <div className="add-modal"> 
-                    <span onClick={this.editTimeModal} className="closeBtnLogin">&times;</span>
+                    <span className="closeBtnLogin">&times;</span>
                     <div className="add">
                     <form onSubmit={this.onEditSubmit}>
                         <div>
@@ -99,7 +134,7 @@ class EditingModal extends React.Component {
                                 onChange={this.onChange}
                                 name="time" 
                                 type="text"
-                                placeholder={time.time}
+                                placeholder="08:00 - 20:00"
                                 pattern="[0-9]{2}:[0-9]{2}"
                                 value={this.state.time}
                             />
@@ -108,7 +143,7 @@ class EditingModal extends React.Component {
                                 onChange={this.onChange}
                                 name="author" 
                                 type="text"
-                                placeholder={time.author}
+                                placeholder="Name"
                                 value={this.state.author}
                             />
                             <div className="select">
@@ -130,52 +165,19 @@ class EditingModal extends React.Component {
                     </div>
                 </div>
             );
-    }
-
-    onDeleteClick = _id => {
-        this.props.deleteAppointmentTime(_id);
-    }
-
-    render(){
-        const { times } = this.props.times;
-        if(this.state.addTimeModalOpen){
-            return this.renderAddTimeModal();
-        } else if(this.state.editTimeModal){
-            return this.renserEditTimeModal();
         }
-        return (
-            <div className="popup">
-                {
-                    times.map(({ _id, time, author, selected, date }) => {
-                        if(date !== this.props.dateId) {
-                            return null;
-                        }
-                        return (    
-                            <span key={_id} className="shows">
-                                <div className="show">
-                                    <p className="time">Time: {time}</p>
-                                    <p>Author: {author}</p>
-                                    <p>Selected: {selected}</p>    
-                                    <button onClick={this.onDeleteClick.bind(this, _id)} className="btn-dash-del-edit">X</button>
-                                    <button onClick={this.editTimeModal.bind(this, _id)} className="btn-dash-del-edit">Edit</button>
-                                </div>
-                            </span>    
-                        );
-                    })
-                }   
-                <button onClick={this.addTimeModalOpen} className="btn-dash-add">Add Time</button>
-            </div>
-        );
+        return <button onClick={this.onClickOpen} className="btn-dash-add">Add</button>;
     };
 };
 
 const mapStateToProps = state => {
-    return { times: state.times }
+    return {dates: state.dates}
 }
+
 export default connect(
-    mapStateToProps,
-    { fetchAppointmentsTime,
+    mapStateToProps, 
+    { 
+        addAppointment, 
         addAppointmentTime,
-        updateTimeById,
-    deleteAppointmentTime }
-    )(EditingModal);
+        updateTimeById
+    })(Login);

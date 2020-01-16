@@ -1,39 +1,73 @@
 import React from 'react';
 import './index.css';
 import { connect } from 'react-redux';
-import { fetchAppointmentsDate, fetchAppointmentsTime, deleteAppointmentDate, deleteAppointmentTime } from '../../../App/actions';
+import { fetchAppointmentsDate, addAppointment, deleteAppointmentDate } from '../../../App/actions';
 import AddFromModal from '../AddDateModal';
 
 class DashPopup extends React.Component{
     state = {
-        showEditor: false,
-        idForEdit: ''
+        addDateModalOpen: false
     }
     componentDidMount(){
         this.props.fetchAppointmentsDate();
-        this.props.fetchAppointmentsTime();
     }
-    showEditor = (_id) => {
-        this.setState({ 
-            showEditor: !this.state.showEditor,
-            idForEdit: _id
-         })
+   
+    addDateModalOpen = () => {
+        this.setState({
+            addDateModalOpen: !this.state.addDateModalOpen
+        })
     }
+
+    onSubmit = e => {
+        e.preventDefault();
+        
+        const newAppointment = {
+            dateForAppointment: this.props.allDay.props.children
+        }
+        this.props.addAppointment(newAppointment);
+        this.addDateModalOpen();
+    }
+
+    renderAddDateModal(){
+        return(
+            <div className="add-modal"> 
+                <span onClick={this.addDateModalOpen} className="closeBtnLogin">&times;</span>
+                <div className="add">
+                    <form onSubmit={this.onSubmit}>
+                        <div>
+                            <label>Date</label>
+                            <input 
+                                name="dateForAppointment" 
+                                type="text" 
+                                disabled 
+                                value={this.props.allDay.props.children} 
+                            />
+                            <button 
+                                className="btn-add" 
+                                type="submit">
+                                    Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        );
+    }
+
     onDeleteClick = _id => {
         this.props.deleteAppointmentDate(_id);
     }
-    onTimeDeleteClick = _id => {
-        this.props.deleteAppointmentTime(_id);
-    }
-
+   
     render(){
-        const { appointments } = this.props.appointments;
-        const { appointmentsTimes } = this.props.appointmentsTimes;
-        if(this.props.popup){ 
+        const { dates } = this.props.dates;
+        if(this.props.popup){
+            if(this.state.addDateModalOpen){
+                return this.renderAddDateModal();
+            }
             return (
                 <div>
                     { 
-                        appointments.map(({ _id, dateForAppointment }) => {
+                        dates.map(({ _id, dateForAppointment }) => {
                             if(dateForAppointment === this.props.allDay.props.children){
                                 return ( 
                                     <div key={_id}>
@@ -41,52 +75,32 @@ class DashPopup extends React.Component{
                                             <div className="spacer" /> 
                                             <button onClick={this.onDeleteClick.bind(this, _id)} className="btn-dash-delete">&times;</button>
                                         </h2>
-                                        <div className="popup">
-                                        {
-                                            appointmentsTimes.map(({ _id, time, author, selected, date }) => {
-                                                if(_id !== date){
-                                                    return (    
-                                                        <span key={_id} className="shows">
-                                                            <div className="show">
-                                                                <p className="time">Time: {time}</p>
-                                                                <p>Author: {author}</p>
-                                                                <p>Selected: {selected}</p>    
-                                                                <button onClick={this.onTimeDeleteClick.bind(this, _id)} className="btn-dash-del-edit">X</button>
-                                                                <button onClick={this.showEditor.bind(this, _id)} className="btn-dash-del-edit">Edit</button>
-                                                            </div>
-                                                        </span>    
-                                                    );
-                                                }
-                                                return null;
-                                            })
-                                        }
-                                        </div>
-
+                                            <AddFromModal 
+                                                dateId={_id} 
+                                                allDay={this.props.allDay} 
+                                            />
                                     </div>
                                 );
                             } 
-                            return null;
+                            return <button key={_id} onClick={this.addDateModalOpen} className="btn-dash-add">Add Date</button>;
                         }) 
                     }
-                    <AddFromModal idForEdit={this.state.idForEdit} showEditor={this.state.showEditor} allDay={this.props.allDay} />
                 </div>
             );
         } 
-        return "";
+        return <button onClick={this.addDateModalOpen} className="btn-dash-add">Add Date</button>;
     };
 }
 
 const mapsStateToProps = state => {
     return {
-        appointments: state.appointments,
-        appointmentsTimes: state.appointments
+        dates: state.dates
     }
 };
 
 export default connect(mapsStateToProps, 
     { 
-        fetchAppointmentsDate, 
-        fetchAppointmentsTime, 
-        deleteAppointmentDate,
-        deleteAppointmentTime
+        fetchAppointmentsDate,
+        addAppointment,
+        deleteAppointmentDate
     })(DashPopup);

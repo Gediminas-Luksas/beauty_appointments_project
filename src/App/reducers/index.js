@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
-import appointmentsReducer from './appointmentsReducer';
+import datesReducer from './datesReducer';
+import timesReducer from './timesReducer';
 
 export default combineReducers({
-    appointments: appointmentsReducer
+    dates: datesReducer,
+    times: timesReducer
 });
