@@ -1,6 +1,6 @@
 .add-modal{
     position: relative;
-    height: 60vh;
+    height: 80vh;
     width: 100%;
     background: rgba(0, 0, 0, 0.5);
     margin: 4px 0 14px 0;
@@ -11,8 +11,8 @@
    top: 50%;
    left: 50%;
    width: 300px;
-   height: 350px;
-   padding: 80px 40px;
+   height: 400px;
+   padding: 40px 40px;
    box-sizing: border-box;
    background: rgba(0, 0, 0, 0.7);
    transform: translate(-50%, -50%);

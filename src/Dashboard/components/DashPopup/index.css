@@ -7,22 +7,40 @@
 }
 .popup .show {
     display: flex;
+    background: #cfcfcf8f;
+    border: #F82D02 solid 1px;
     flex-direction: column;
-    padding: 8px 14px;
+    padding: 29px 16px;
+    margin: 4px;
     visibility: visible;
     -webkit-animation: fadeIn 1s;
     animation: fadeIn 1s;
   }
+
+  .showColor{
+    border: #0e9701 solid 1px;
+    background: #cfcfcf8f;
+    display: flex;
+    flex-direction: column;
+    padding: 8px 14px;
+    visibility: visible;
+    margin: 4px;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+  }
+ 
   .dach-popup{
     display: flex;
     align-items: center;
   }
   .time{
     color: #000;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
   }
-  
+  .line_buttom{
+    border-bottom: solid 1px #000000;
+  }
   @-webkit-keyframes fadeIn {
     from {opacity: 0;} 
     to {opacity: 1;}
@@ -37,10 +55,9 @@
     background: #e84393;
     color: #ffffff;
     height: 20px;
-    width: 60px;
+    width: 40px;
     cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 12px;
     margin: 1px;
     border: none;
     outline: none;

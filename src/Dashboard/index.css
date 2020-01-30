@@ -329,3 +329,56 @@ body{
 }
 
 
+.dachcalendar{
+    flex: 1;
+    padding-bottom: 20px;
+}
+
+.dashmonth {
+    padding: 10px;
+    width: 90%;
+    margin: auto;
+    text-align: center;
+  }
+
+  .dashmonth ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .dashmonth ul li {
+    color: #5f5f79;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+  
+  .dashmonth .prev {
+    height: 40px;
+    width: 40px;
+    float: left;
+    border: #e84393 1px solid;
+    color: #e84393;
+    border-radius: 50%;
+    padding: 4px 0px 0 0px;
+    cursor: pointer;
+  }
+  .dashmonth .prev:hover {
+    color: #000;
+}
+  
+  .dashmonth .next {
+    height: 40px;
+    width: 40px;
+    float: right;
+    border: #e84393 1px solid;
+    color: #e84393;
+    border-radius: 50%;
+    padding: 4px 0px 0 4px;
+    cursor: pointer;
+  }
+  .dashmonth .next:hover {
+    color: #000;
+  }
+
